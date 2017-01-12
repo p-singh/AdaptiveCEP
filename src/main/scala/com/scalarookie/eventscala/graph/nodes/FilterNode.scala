@@ -53,6 +53,8 @@ case class FilterNode(
     if (query.asInstanceOf[KeepEventsWith6[Any, Any, Any, Any, Any, Any]].cond(e1, e2, e3, e4, e5, e6)) emitEvent(Event6(e1, e2, e3, e4, e5, e6))
 
   override def receive: Receive = {
+    case DependenciesRequest =>
+      sender ! DependenciesResponse(Seq(childNode))
     case GraphCreated if sender() == childNode =>
       emitGraphCreated()
     case event: Event if sender() == childNode => event match {

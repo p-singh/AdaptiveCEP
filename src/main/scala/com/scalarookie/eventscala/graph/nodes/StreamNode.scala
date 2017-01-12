@@ -38,6 +38,8 @@ case class StreamNode(
   }
 
   override def receive: Receive = {
+    case DependenciesRequest =>
+      sender ! DependenciesResponse(Seq.empty)
     case AcknowledgeSubscription if sender() == publisher =>
       emitGraphCreated()
     case event: Event if sender() == publisher =>

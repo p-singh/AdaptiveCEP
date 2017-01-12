@@ -39,6 +39,8 @@ case class SelfJoinNode(
   }
 
   override def receive: Receive = {
+    case DependenciesRequest =>
+      sender ! DependenciesResponse(Seq(childNode))
     case GraphCreated if sender() == childNode =>
       emitGraphCreated()
     case event: Event if sender() == childNode => event match {

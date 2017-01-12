@@ -81,6 +81,8 @@ case class JoinNode(
   }
 
   override def receive: Receive = {
+    case DependenciesRequest =>
+      sender ! DependenciesResponse(Seq(childNode1, childNode2))
     case GraphCreated if sender() == childNode1 =>
       graphCreatedFromChildNode1 = true
       if (graphCreatedFromChildNode2) emitGraphCreated()

@@ -1,5 +1,7 @@
 package com.scalarookie.eventscala.data
 
+import akka.actor.ActorRef
+
 object Events {
 
   case object GraphCreated
@@ -12,4 +14,6 @@ object Events {
   case class Event5(e1: Any, e2: Any, e3: Any, e4: Any, e5: Any)          extends Event
   case class Event6(e1: Any, e2: Any, e3: Any, e4: Any, e5: Any, e6: Any) extends Event
 
+  case object DependenciesRequest
+  case class DependenciesResponse(dependencies: Seq[ActorRef])
 }
