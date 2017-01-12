@@ -1,5 +1,7 @@
 package com.scalarookie.eventscala.system
 
+import java.util.concurrent.atomic.AtomicInteger
+
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
@@ -13,6 +15,10 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
+
+object System {
+  val index = new AtomicInteger(0)
+}
 
 class System(implicit actorSystem: ActorSystem) {
   private val roots = ListBuffer.empty[ActorRef]
@@ -33,7 +39,7 @@ class System(implicit actorSystem: ActorSystem) {
         SelfJoinNode(selfJoinQuery, publishers, frequencyMonitorFactory, latencyMonitorFactory, callback)
       case joinQuery: JoinQuery =>
         JoinNode(joinQuery, publishers, frequencyMonitorFactory, latencyMonitorFactory, callback)
-    }), "root")
+    }), s"root-${System.index.getAndIncrement()}")
 
   def consumers: Seq[Operator] = {
     import actorSystem.dispatcher
